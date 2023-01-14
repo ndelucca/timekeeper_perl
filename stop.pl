@@ -4,7 +4,8 @@ use v5.28;
 use warnings;
 use autodie;
 
-use lib qw(./lib);
+use FindBin;
+use lib "$FindBin::Bin/lib";
 
 use Timekeeper::DB;
 use Timekeeper::Date;

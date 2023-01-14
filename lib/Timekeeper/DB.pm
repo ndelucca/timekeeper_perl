@@ -5,9 +5,10 @@ use warnings;
 use autodie;
 
 use DBI;
+use FindBin;
 
 my %conf = (
-    dbname     => 'timedb.sqlite',
+    dbname     => "$FindBin::Bin/timedb.sqlite",
     table_name => 'times'
 );
 
