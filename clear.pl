@@ -10,8 +10,8 @@ use Timekeeper::DB;
 
 my $db = Timekeeper::DB->New();
 
-$db->register_start();
+$db->clear_registers();
 
-say 'Welcome';
+say 'cleared';
 
 exit 0;

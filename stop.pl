@@ -10,7 +10,6 @@ use Timekeeper::DB;
 
 my $db = Timekeeper::DB->New();
 
-$db->initialize();
 $db->register_stop();
 
 say 'Bye';

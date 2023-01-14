@@ -10,8 +10,10 @@ use Timekeeper::DB;
 
 my $db = Timekeeper::DB->New();
 
-$db->register_start();
+my $registers = $db->fetch();
 
-say 'Welcome';
+for my $register ( @$registers ) {
+    say join ' ', @$register;
+}
 
 exit 0;
