@@ -5,7 +5,6 @@ use warnings;
 use autodie;
 
 use DBI;
-use Timekeeper::Date;
 
 my %conf = (
     dbname     => 'timedb.sqlite',
@@ -55,7 +54,8 @@ sub fetch {
         $options .= qq|LIMIT $args{limit}|;
     }
 
-    my $results = $self->db->selectall_arrayref(qq|SELECT operation, date FROM $conf{table_name} $options|);
+    my $results = $self->db->selectall_arrayref(
+        qq|SELECT operation, date FROM $conf{table_name} $options|);
 
     return $results;
 }
@@ -63,21 +63,24 @@ sub fetch {
 sub register {
     my $self      = shift;
     my $operation = shift;
+    my $datetime  = shift;
     $self->db->do(
         qq|INSERT INTO $conf{table_name} (operation, date) VALUES (?,?)|,
-        undef, $operation, Timekeeper::Date::Create() );
+        undef, $operation, $datetime );
     return;
 }
 
 sub register_start {
-    my $self = shift;
-    $self->register('IN');
+    my $self     = shift;
+    my $datetime = shift;
+    $self->register( 'IN', $datetime );
     return;
 }
 
 sub register_stop {
-    my $self = shift;
-    $self->register('OUT');
+    my $self     = shift;
+    my $datetime = shift;
+    $self->register( 'OUT', $datetime );
     return;
 }
 

@@ -7,10 +7,11 @@ use autodie;
 use lib qw(./lib);
 
 use Timekeeper::DB;
+use Timekeeper::Date;
 
 my $db = Timekeeper::DB->New();
 
-$db->register_start();
+$db->register_start( Timekeeper::Date::Create() );
 
 say 'Welcome';
 
