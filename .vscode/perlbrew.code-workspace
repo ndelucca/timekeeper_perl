@@ -1,0 +1,41 @@
+{
+    "folders": [
+        {
+            "path": ".."
+        },
+    ],
+    "settings": {
+        "window.title": "${dirty}${rootPath}${separator}${activeEditorMedium}",
+        "files.watcherExclude": {
+            "**/.git/objects/**": true,
+            "**/.git/subtree-cache/**": true,
+        },
+        "files.insertFinalNewline": true,
+        "files.trimTrailingWhitespace": true,
+        "files.eol": "\n",
+        "files.encoding": "iso88591",
+        "editor.insertSpaces": true,
+        "editor.rulers": [
+            80
+        ],
+        "editor.tabSize": 4,
+        "editor.formatOnSave": false,
+        "files.associations": {
+            "*.pl": "perl",
+            "*.cgi": "perl",
+            "*.htm": "html"
+        },
+        "workbench.colorCustomizations": {
+            "titleBar.activeBackground": "#0d3908"
+        },
+        "git.mergeEditor": true,
+        "perlnavigator.includePaths": [
+            "./",
+            "./lib/",
+        ],
+        // "perlnavigator.perlPath": "~/perl5/perlbrew/perls/perl-5.36.0/bin/perl",
+        "perlnavigator.severity3": "info",
+        "perlnavigator.severity4": "warning",
+        "perlnavigator.severity5": "error",
+    }
+}
