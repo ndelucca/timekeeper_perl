@@ -6,4 +6,13 @@ use autodie;
 
 use lib qw(./lib);
 
+use Timekeeper::DB;
+
+my $db = Timekeeper::DB->New();
+
+$db->initialize();
+$db->register_start();
+
 say 'Welcome';
+
+exit 0;
