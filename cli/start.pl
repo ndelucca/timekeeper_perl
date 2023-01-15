@@ -5,7 +5,7 @@ use warnings;
 use autodie;
 
 use FindBin;
-use lib "$FindBin::Bin/lib";
+use lib "$FindBin::Bin/../lib";
 
 use Timekeeper::DB;
 use Timekeeper::Date;

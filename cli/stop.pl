@@ -5,14 +5,15 @@ use warnings;
 use autodie;
 
 use FindBin;
-use lib "$FindBin::Bin/lib";
+use lib "$FindBin::Bin/../lib";
 
 use Timekeeper::DB;
+use Timekeeper::Date;
 
 my $db = Timekeeper::DB->New();
 
-$db->clear_registers();
+$db->register_stop( Timekeeper::Date::Create() );
 
-say 'cleared';
+say 'Bye';
 
 exit 0;

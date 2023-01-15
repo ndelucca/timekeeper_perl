@@ -8,7 +8,7 @@ use DBI;
 use FindBin;
 
 my %conf = (
-    dbname     => "$FindBin::Bin/timedb.sqlite",
+    dbname     => "$FindBin::Bin/../timedb.sqlite",
     table_name => 'times'
 );
 
