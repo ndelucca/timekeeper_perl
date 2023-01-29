@@ -8,9 +8,14 @@ use DBI;
 use FindBin;
 
 my %conf = (
-    dbname     => "$FindBin::Bin/../timedb.sqlite",
-    table_name => 'times'
+    dbname       => "$FindBin::Bin/../timedb.sqlite",
+    table_name   => 'times',
+    column_names => [ 'id', 'operation', 'date' ],
 );
+
+sub ColNames {
+    return $conf{column_names};
+}
 
 sub New {
     my $class = shift;
@@ -33,7 +38,7 @@ sub initialize {
     my $self = shift;
 
     $self->db->do(
-        qq|CREATE TABLE IF NOT EXISTS times (
+        qq|CREATE TABLE IF NOT EXISTS $conf{table_name} (
         id integer PRIMARY KEY AUTOINCREMENT NOT NULL,
         operation TEXT CHECK( operation IN ('IN','OUT') ) NOT NULL,
         date TEXT
@@ -56,7 +61,7 @@ sub fetch {
     }
 
     my $results = $self->db->selectall_arrayref(
-        qq|SELECT operation, date FROM $conf{table_name} $options|);
+        qq|SELECT id, operation, date FROM $conf{table_name} $options|);
 
     return $results;
 }

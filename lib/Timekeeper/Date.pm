@@ -43,4 +43,17 @@ sub ToTimekeepingTimePiece {
 
 }
 
+sub EarlierThan {
+    my %args = @_;
+
+    my $seconds = $args{days} * 24 * 60 * 60;
+    my $date    = ToTimePiece( $args{date} );
+    my $now     = localtime;
+
+    my $diff = $now - $date;
+
+    return $diff > $seconds ? 0 : 1;
+
+}
+
 1;
