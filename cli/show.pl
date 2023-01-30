@@ -25,7 +25,12 @@ sub show {
 
     @registers = grep { days_filter( $_, $params ) } @registers;
 
-    say Timekeeper::CLI::DataAsTable( Timekeeper::DB->ColNames(), \@registers );
+    if ( $params->{raw} ) {
+        say Timekeeper::CLI::DataAsTable( Timekeeper::DB->ColNames(), \@registers );
+        return;
+    }
+
+    my %days = group_by_day(@registers);
 
     return;
 }
@@ -40,4 +45,21 @@ sub days_filter {
         date => $register->[2],
         days => $params->{days}
     );
+}
+
+sub group_by_day {
+    my @registers = @_;
+
+    my %days = ();
+
+    for my $register (@registers) {
+        my ( $id, $operation, $date ) = @$register;
+
+        my $day = Timekeeper::Date::CompressedDate($date);
+
+        $days{$day}->{$operation} = [] unless $days{$day}->{$operation};
+        push @{ $days{$day}->{$operation} }, $date;
+    }
+
+    return %days;
 }

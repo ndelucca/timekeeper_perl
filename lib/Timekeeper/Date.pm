@@ -56,4 +56,10 @@ sub EarlierThan {
 
 }
 
+sub CompressedDate {
+    my $date_str = shift;
+    my $date = ToTimePiece($date_str)->ymd();
+    $date =~ s/-//gi;
+    return $date;
+}
 1;

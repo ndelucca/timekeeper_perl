@@ -10,12 +10,17 @@ use Text::TabularDisplay;
 sub ParseShowOptions {
 
     my $days = 0;
+    my $raw;
 
     Getopt::Long::GetOptions(
-        "d|days=i" => \$days,
+        'd|days=i' => \$days,
+        'r|raw'    => \$raw,
     );
 
-    return { days => $days };
+    return {
+        days => $days,
+        raw  => $raw,
+    };
 
 }
 
