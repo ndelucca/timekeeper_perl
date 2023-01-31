@@ -60,7 +60,7 @@ sub group_by_day {
 
         my $day = Timekeeper::Date::CompressedDate($date);
 
-        $days{$day}->{$operation} = [] unless $days{$day}->{$operation};
+        $days{$day} = { IN => [], OUT => [] } unless $days{$day};
         push @{ $days{$day}->{$operation} }, $date;
     }
 
@@ -78,7 +78,7 @@ sub fuse_days {
         my @checkouts = @{ $days{$day}{OUT} };
 
         if ( @checkins != @checkouts ) {
-            my $error = "$day inconsistent - in (%s) - out (%s)";
+            my $error = "$day inconsistent - (%s)";
             push @errors, sprintf $error, join( '/', @checkins, @checkouts );
             next;
         }
@@ -91,6 +91,8 @@ sub fuse_days {
         $parsed{$day} = Timekeeper::Date::Simplify(\@checkins, \@checkouts);
 
     }
+
+    say $_ for @errors;
 
     return %parsed;
 }
