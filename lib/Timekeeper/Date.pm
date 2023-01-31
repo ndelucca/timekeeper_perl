@@ -4,7 +4,8 @@ use v5.28;
 use warnings;
 use autodie;
 
-use Time::Piece;
+use Time::Piece     ();
+use List::MoreUtils qw(zip_unflatten);
 
 use constant STR_FORMAT     => '%s-%s-%s %s:%s';
 use constant DT_FORMAT      => '%Y-%m-%d %H:%M';
@@ -13,7 +14,7 @@ use constant ROUND_INTERVAL => 15;
 sub Create {
     my $date = shift;
 
-    my $timepiece = localtime;
+    my $timepiece = Time::Piece::localtime;
     $timepiece = ToTimePiece($date) if $date;
 
     return ToTimekeepingTimePiece($timepiece)->strftime(DT_FORMAT);
@@ -48,7 +49,7 @@ sub EarlierThan {
 
     my $seconds = $args{days} * 24 * 60 * 60;
     my $date    = ToTimePiece( $args{date} );
-    my $now     = localtime;
+    my $now     = Time::Piece::localtime;
 
     my $diff = $now - $date;
 
@@ -58,8 +59,37 @@ sub EarlierThan {
 
 sub CompressedDate {
     my $date_str = shift;
-    my $date = ToTimePiece($date_str)->ymd();
+    my $date     = ToTimePiece($date_str)->ymd();
     $date =~ s/-//gi;
     return $date;
 }
+
+sub Simplify {
+    my $checkins  = shift;
+    my $checkouts = shift;
+
+    my $init = shift @$checkins;
+    my $end  = ToTimePiece( shift @$checkouts );
+
+    for my $pair ( zip_unflatten( @$checkins, @$checkouts ) ) {
+        my ( $in, $out ) = @$pair;
+
+        my $tk_in  = ToTimePiece($in);
+        my $tk_out = ToTimePiece($out);
+
+        my $diff = $tk_out - $tk_in;
+
+        $end += $diff;
+
+    }
+
+    $end = ToTimekeepingTimePiece($end)->strftime(DT_FORMAT);
+
+    return {
+        in  => $init,
+        out => $end,
+    };
+
+}
+
 1;

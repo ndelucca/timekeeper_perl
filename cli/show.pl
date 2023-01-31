@@ -26,11 +26,14 @@ sub show {
     @registers = grep { days_filter( $_, $params ) } @registers;
 
     if ( $params->{raw} ) {
-        say Timekeeper::CLI::DataAsTable( Timekeeper::DB->ColNames(), \@registers );
+        say Timekeeper::CLI::DataAsTable( Timekeeper::DB->ColNames(),
+            \@registers );
         return;
     }
 
-    my %days = group_by_day(@registers);
+    my %days = fuse_days( group_by_day(@registers) );
+
+    say Timekeeper::CLI::DaysAsTable(%days);
 
     return;
 }
@@ -62,4 +65,32 @@ sub group_by_day {
     }
 
     return %days;
+}
+
+sub fuse_days {
+    my %days = @_;
+
+    my %parsed = ();
+    my @errors = ();
+
+    for my $day ( keys %days ) {
+        my @checkins  = @{ $days{$day}{IN} };
+        my @checkouts = @{ $days{$day}{OUT} };
+
+        if ( @checkins != @checkouts ) {
+            my $error = "$day inconsistent - in (%s) - out (%s)";
+            push @errors, sprintf $error, join( '/', @checkins, @checkouts );
+            next;
+        }
+
+        if ( ! @checkins ) {
+            push @errors, "$day with no data";
+            next;
+        }
+
+        $parsed{$day} = Timekeeper::Date::Simplify(\@checkins, \@checkouts);
+
+    }
+
+    return %parsed;
 }
